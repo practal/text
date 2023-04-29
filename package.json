@@ -1,14 +1,14 @@
 {
-  "name": "hybrid-module-template",
+  "name": "@practal/text",
   "version": "0.0.1",
-  "description": "Template for creating a hybrid ESM/CommonJS typescript module.",
+  "description": "Manipulating and parsing text.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "type": "module",
   "exports": {
     ".": {
-        "import": "./dist/esm/index.js",
-        "require": "./dist/cjs/index.js"
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
     }
   },
   "scripts": {
@@ -17,16 +17,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/phlegmaticprogrammer/hybrid-module-template.git"
+    "url": "git+https://github.com/practal/text.git"
   },
   "author": "Steven Obua",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/phlegmaticprogrammer/hybrid-module-template/issues"
+    "url": "https://github.com/practal/text/issues"
   },
-  "homepage": "https://github.com/phlegmaticprogrammer/hybrid-module-template#readme",
+  "homepage": "https://github.com/practal/text#readme",
   "devDependencies": {
     "@types/node": "^18.15.11",
     "typescript": "^5.0.3"
-  }  
+  },
+  "dependencies": {
+    "things": "^4.1.0"
+  }
 }
