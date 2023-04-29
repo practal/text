@@ -401,3 +401,64 @@ export function trimTextLines(textlines : TextLines) : TextLines {
     }
     return createTextLines(lines);
 }
+
+export class TextLinesUntil implements TextLines {
+
+    source : TextLines
+
+    endLine : number  
+
+    lastLine : Text
+
+    /** Same as lines.length */
+    lineCount : number
+
+    constructor(source : TextLines, endLine : number, endColumn : number) {
+        if (endLine >= source.lineCount || endLine < 0) throw new Error("TextLinesUntil: endLine is out of range");
+        this.source = source;
+        this.endLine = endLine;
+        let lastLine = source.lineAt(endLine);
+        if (lastLine.count <= endColumn) {
+            this.lastLine = lastLine;
+        } else {
+            this.lastLine = lastLine.slice(0, endColumn);
+        }
+        this.lineCount = endLine + 1;
+    }
+
+    log(print : (text : string) => void = console.log) {
+        print(`[TextWindowUntil] endLine ${this.endLine} out of ${this.source.lineCount} lines:`);
+        for (let i = 0; i < this.lineCount; i ++) {
+            print(`  ${i}) '${this.lineAt(i)}'`);
+        }
+    }
+
+    lineAt(line: number): Text {
+        if (line < this.endLine) return this.source.lineAt(line); 
+        else if (line === this.endLine) return this.lastLine;
+        else throw new Error("Nnvalid line number " + line + ".");
+    }   
+    
+    absolute(line: number, offset: number): [number, number] {
+        return this.source.absolute(line, offset);
+    }
+
+    valid(line : nat, column : nat) : boolean {
+        if (!this.source.valid(line, column)) return false;
+        if (line < this.endLine) return true;
+        if (line > this.endLine) return false;
+        return column <= this.lastLine.count; 
+    }
+
+    assert(line : nat, column : nat) : void {
+        if (!this.valid(line, column)) 
+            throw new Error(`Invalid position ${line}:${column} in TextLines.`);
+    }        
+
+}
+
+export function textlinesUntil(lines : TextLines, endLine : number, endColumn : number) : TextLines {
+    if (endLine >= lines.lineCount) return lines;
+    return new TextLinesUntil(lines, endLine, endColumn);
+}
+
