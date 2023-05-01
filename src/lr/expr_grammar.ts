@@ -15,7 +15,29 @@ export const enum ExprKind {
 
 export type Expr = Sym | { kind : ExprKind, params : Expr[] }
 
-export type ExprGrammar = { start : Sym, rules : { lhs : Sym, rhs : Expr }[], distinct? : Sym[][], empty? : [Sym, Sym][], final? : Sym[] }
+export type ExprGrammar = { 
+    /** The start symbol of the grammar. Can it be a terminal? */
+    start : Sym, 
+    
+    /** The rules of the grammar. */
+    rules : { lhs : Sym, rhs : Expr }[],
+
+    /** 
+     * Each case lists terminal symbols which are guaranteed to be distinct from each other.
+     * Two terminals p and q are called distinct, if it is impossible to successfully parse both 
+     * of them at the same position in the text.
+     */
+    distinct? : Sym[][], 
+
+    /**
+     * Each case lists a pair of terminals (e, n), where e successfully also parses the empty string,
+     * and n parses the same as e, except that it doesn't parse the empty string.
+     */
+    empty? : [Sym, Sym][], 
+    
+    /** The terminals which signal the end of the input. */
+    final? : Sym[] 
+}
 
 export function cloneExpr(expr : Expr) : Expr {
     if (typeof expr === "string") return expr;
